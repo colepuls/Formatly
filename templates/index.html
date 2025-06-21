@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formatly - Image Converter</title>
+    <style>
+        html, body {
+            height: 100%;
+        }
+        body {
+            font-family: system-ui, sans-serif;
+            background: #181a1b;
+            color: #f3f3f3;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            margin: 0;
+        }
+        .container {
+            background: #232526;
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+            padding: 32px 24px 24px 24px;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+        }
+        .logo {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+        .subtitle {
+            color: #b0b0b0;
+            margin-bottom: 24px;
+            font-size: 1rem;
+        }
+        .upload-area {
+            border: 2px dashed #444;
+            border-radius: 8px;
+            padding: 20px 0;
+            margin: 16px 0 12px 0;
+            cursor: pointer;
+            background: #181a1b;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+        .upload-area:hover, .upload-area.dragover {
+            border-color: #888;
+            background: #1e2021;
+            transform: translateY(-1px);
+        }
+        .upload-icon {
+            font-size: 2.2rem;
+            color: #888;
+            margin-bottom: 8px;
+        }
+        .upload-text {
+            font-size: 1rem;
+            color: #f3f3f3;
+            margin-bottom: 4px;
+        }
+        .upload-hint {
+            color: #888;
+            font-size: 0.85rem;
+        }
+        .file-input {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer;
+            z-index: 10;
+        }
+        .format-select-row {
+            margin: 18px 0 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .format-select-row label {
+            font-size: 1rem;
+            color: #b0b0b0;
+        }
+        #formatSelect {
+            background: #181a1b;
+            color: #f3f3f3;
+            border: 1px solid #444;
+            border-radius: 6px;
+            padding: 6px 16px;
+            font-size: 1rem;
+        }
+        .progress-container {
+            display: none;
+            margin: 18px 0 0 0;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #232526;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        .progress-fill {
+            height: 100%;
+            background: #4f8cff;
+            width: 0%;
+            transition: width 0.3s;
+            border-radius: 3px;
+        }
+        .progress-text {
+            color: #b0b0b0;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid #333;
+            border-top: 2px solid #4f8cff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .result-container {
+            display: none;
+            margin: 18px 0 0 0;
+            padding: 16px;
+            background: #181a1b;
+            border-radius: 8px;
+            border: 1px solid #333;
+        }
+        .success-icon {
+            font-size: 1.5rem;
+            color: #4f8cff;
+            margin-bottom: 8px;
+        }
+        .download-btn {
+            background: #4f8cff;
+            color: #fff;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin: 10px 5px 0 5px;
+            text-decoration: none;
+            display: inline-block;
+            transition: background 0.2s;
+        }
+        .download-btn:hover {
+            background: #2563eb;
+        }
+        .error-container {
+            display: none;
+            margin: 18px 0 0 0;
+            padding: 12px;
+            background: #2d1a1a;
+            border: 1px solid #a33;
+            border-radius: 8px;
+            color: #ffb3b3;
+        }
+        @media (max-width: 500px) {
+            .container { padding: 16px 4px; }
+            
+            /* Adjust carousel for mobile */
+            .file-types-carousel {
+                top: -25px;
+                left: -25px;
+                right: -25px;
+                bottom: -25px;
+            }
+            
+            .file-type-item {
+                padding: 4px 8px;
+                font-size: 0.65rem;
+                animation-duration: 15s;
+            }
+            
+            @keyframes rotateAround {
+                0% {
+                    transform: rotate(0deg) translateX(120px) rotate(0deg);
+                    opacity: 0.8;
+                }
+                25% {
+                    opacity: 1;
+                }
+                50% {
+                    opacity: 0.8;
+                }
+                75% {
+                    opacity: 1;
+                }
+                100% {
+                    transform: rotate(360deg) translateX(120px) rotate(-360deg);
+                    opacity: 0.8;
+                }
+            }
+        }
+        
+        /* Rotating file types carousel */
+        .file-types-carousel {
+            position: absolute;
+            top: -40px;
+            left: -40px;
+            right: -40px;
+            bottom: -40px;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .file-type-item {
+            position: absolute;
+            background: linear-gradient(135deg, #6b21a8, #4c1d95);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            white-space: nowrap;
+            opacity: 0.8;
+            transform-origin: center;
+            animation: rotateAround 20s linear infinite;
+            box-shadow: 0 2px 8px rgba(107, 33, 168, 0.3);
+        }
+        
+        .file-type-item:nth-child(1) { animation-delay: 0s; }
+        .file-type-item:nth-child(2) { animation-delay: -1.67s; }
+        .file-type-item:nth-child(3) { animation-delay: -3.33s; }
+        .file-type-item:nth-child(4) { animation-delay: -5s; }
+        .file-type-item:nth-child(5) { animation-delay: -6.67s; }
+        .file-type-item:nth-child(6) { animation-delay: -8.33s; }
+        .file-type-item:nth-child(7) { animation-delay: -10s; }
+        .file-type-item:nth-child(8) { animation-delay: -11.67s; }
+        .file-type-item:nth-child(9) { animation-delay: -13.33s; }
+        .file-type-item:nth-child(10) { animation-delay: -15s; }
+        .file-type-item:nth-child(11) { animation-delay: -16.67s; }
+        .file-type-item:nth-child(12) { animation-delay: -18.33s; }
+        
+        @keyframes rotateAround {
+            0% {
+                transform: rotate(0deg) translateX(180px) rotate(0deg);
+                opacity: 0.8;
+            }
+            25% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.8;
+            }
+            75% {
+                opacity: 1;
+            }
+            100% {
+                transform: rotate(360deg) translateX(180px) rotate(-360deg);
+                opacity: 0.8;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="file-types-carousel">
+            <div class="file-type-item">PNG</div>
+            <div class="file-type-item">JPEG</div>
+            <div class="file-type-item">GIF</div>
+            <div class="file-type-item">WEBP</div>
+            <div class="file-type-item">TIFF</div>
+            <div class="file-type-item">BMP</div>
+            <div class="file-type-item">ICO</div>
+            <div class="file-type-item">PDF</div>
+            <div class="file-type-item">SVG</div>
+            <div class="file-type-item">HEIC</div>
+            <div class="file-type-item">RAW</div>
+            <div class="file-type-item">PSD</div>
+        </div>
+        <div class="logo">Formatly</div>
+        <div class="subtitle">Convert any image to any format</div>
+        {% if not imagemagick_available %}
+        <div style="margin: 8px 0; padding: 8px 12px; background: #2d1a1a; border: 1px solid #a33; border-radius: 6px; color: #ffb3b3; font-size: 0.85rem;">
+            ⚠️ Some advanced formats (PDF, SVG, EPS, etc.) require ImageMagick. Install ImageMagick for full support.
+        </div>
+        {% endif %}
+        <div class="upload-area" id="uploadArea">
+            <div class="upload-icon">📁</div>
+            <div class="upload-text">Drop your image or click to browse</div>
+            <input type="file" class="file-input" id="fileInput" accept=".jpg,.jpeg,.gif,.bmp,.tiff,.webp,.heic,.raw,.psd,.exr,.ico,.svg,.eps,.pdf,.ai,.cdr,.apng,.svgz,.dds,.tga,.jfif,.avif,.pic,.xcf,.dng,.pcx,.png">
+        </div>
+        <div class="format-select-row">
+            <label for="formatSelect">Convert to:</label>
+            <select id="formatSelect">
+                {% for fmt in all_formats %}
+                <option value="{{ fmt }}" {% if fmt == 'PNG' %}selected{% endif %}>{{ fmt }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="progress-container" id="progressContainer">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text" id="progressText">
+                <span class="spinner"></span>Converting...
+            </div>
+        </div>
+        <div class="result-container" id="resultContainer">
+            <div class="success-icon">✔️</div>
+            <div id="resultText">Conversion completed!</div>
+            <a href="#" class="download-btn" id="downloadBtn">Download</a>
+            <button class="download-btn" onclick="resetForm()">Convert Another</button>
+        </div>
+        <div class="error-container" id="errorContainer">
+            <div id="errorText"></div>
+        </div>
+    </div>
+    <script>
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const progressContainer = document.getElementById('progressContainer');
+        const progressFill = document.getElementById('progressFill');
+        const progressText = document.getElementById('progressText');
+        const resultContainer = document.getElementById('resultContainer');
+        const errorContainer = document.getElementById('errorContainer');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const resultText = document.getElementById('resultText');
+        const errorText = document.getElementById('errorText');
+        const formatSelect = document.getElementById('formatSelect');
+
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFile(files[0]);
+            }
+        });
+        
+        fileInput.addEventListener('change', (e) => {
+            console.log('File input changed:', e.target.files);
+            if (e.target.files.length > 0) {
+                console.log('Selected file:', e.target.files[0]);
+                handleFile(e.target.files[0]);
+            } else {
+                console.log('No file selected');
+            }
+        });
+        function handleFile(file) {
+            console.log('Handling file:', file.name, file.type, file.size);
+            
+            // Validate file type - be more permissive
+            if (file.size > 16 * 1024 * 1024) {
+                showError('File size must be less than 16MB');
+                return;
+            }
+            
+            // Check if it's an image file by extension or MIME type
+            const fileName = file.name.toLowerCase();
+            const fileExtension = fileName.split('.').pop();
+            const isImageByExtension = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff', 'webp', 'heic', 'raw', 'psd', 'exr', 'ico', 'svg', 'eps', 'pdf', 'ai', 'cdr', 'apng', 'svgz', 'dds', 'tga', 'jfif', 'avif', 'pic', 'xcf', 'dng', 'pcx'].includes(fileExtension);
+            const isImageByMime = file.type.startsWith('image/') || file.type === 'application/pdf' || file.type === 'image/svg+xml';
+            
+            if (!isImageByExtension && !isImageByMime) {
+                showError('Please select a valid image file');
+                return;
+            }
+            
+            uploadFile(file);
+        }
+        function uploadFile(file) {
+            console.log('Starting upload for file:', file.name);
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('output_format', formatSelect.value);
+            console.log('Selected format:', formatSelect.value);
+            
+            showProgress();
+            hideError();
+            hideResult();
+            
+            console.log('Sending request to /upload');
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                console.log('Response status:', response.status);
+                return response.json();
+            })
+            .then(data => {
+                console.log('Response data:', data);
+                hideProgress();
+                if (data.success) {
+                    showResult(data.filename, file.name);
+                } else {
+                    showError(data.error || 'Conversion failed');
+                }
+            })
+            .catch(error => {
+                console.error('Upload error:', error);
+                hideProgress();
+                showError('Network error. Please try again.');
+            });
+        }
+        function showProgress() {
+            progressContainer.style.display = 'block';
+            progressFill.style.width = '0%';
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += Math.random() * 20;
+                if (progress > 90) progress = 90;
+                progressFill.style.width = progress + '%';
+            }, 180);
+            progressContainer.dataset.interval = interval;
+        }
+        function hideProgress() {
+            progressContainer.style.display = 'none';
+            progressFill.style.width = '100%';
+            if (progressContainer.dataset.interval) {
+                clearInterval(parseInt(progressContainer.dataset.interval));
+            }
+        }
+        function showResult(filename, originalName) {
+            resultText.textContent = `"${originalName}" converted!`;
+            downloadBtn.href = `/download/${filename}`;
+            downloadBtn.download = `converted_${originalName.replace(/\.[^/.]+$/, '')}.${filename.split('.').pop()}`;
+            resultContainer.style.display = 'block';
+        }
+        function hideResult() {
+            resultContainer.style.display = 'none';
+        }
+        function showError(message) {
+            errorText.textContent = message;
+            errorContainer.style.display = 'block';
+        }
+        function hideError() {
+            errorContainer.style.display = 'none';
+        }
+        function resetForm() {
+            hideProgress();
+            hideResult();
+            hideError();
+            fileInput.value = '';
+        }
+    </script>
+</body>
+</html> 
