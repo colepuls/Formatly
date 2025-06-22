@@ -3,7 +3,7 @@ import os
 import tempfile
 from PIL import Image  # type: ignore
 import numpy as np  # type: ignore
-from image_converter import convert_image, convert_to_png
+from image_converter import convert_image, convert_to_png, pillow_can_write, check_imagemagick
 import shutil
 
 
@@ -17,9 +17,9 @@ class TestImageConverter(unittest.TestCase):
         # Recursively remove the test directory and all its contents
         shutil.rmtree(self.test_dir)
     
-    def create_test_image(self, format_name, size=(100, 100), color=(255, 0, 0)):
+    def create_test_image(self, format_name, size=(100, 100), color=(255, 0, 0), mode='RGB'):
         """Helper method to create test images in different formats."""
-        img = Image.new('RGB', size, color)
+        img = Image.new(mode, size, color)
         filename = f"test_image.{format_name.lower()}"
         filepath = os.path.join(self.test_dir, filename)
         
@@ -29,6 +29,27 @@ class TestImageConverter(unittest.TestCase):
         else:
             img.save(filepath, format=format_name.upper())
         return filepath
+    
+    def test_pillow_can_write_function(self):
+        """Test the pillow_can_write helper function."""
+        # Test supported formats
+        supported_formats = ['JPEG', 'JPG', 'PNG', 'GIF', 'BMP', 'TIFF', 'WEBP', 'ICO', 'TGA', 'PCX']
+        for fmt in supported_formats:
+            with self.subTest(format=fmt):
+                self.assertTrue(pillow_can_write(fmt))
+                self.assertTrue(pillow_can_write(fmt.lower()))
+        
+        # Test unsupported formats
+        unsupported_formats = ['SVG', 'PDF', 'AVIF', 'HEIC', 'UNSUPPORTED_FORMAT']
+        for fmt in unsupported_formats:
+            with self.subTest(format=fmt):
+                self.assertFalse(pillow_can_write(fmt))
+    
+    def test_check_imagemagick_function(self):
+        """Test the check_imagemagick helper function."""
+        result = check_imagemagick()
+        # This should return either 'magick', 'convert', or None
+        self.assertIn(result, ['magick', 'convert', None])
     
     def test_convert_to_jpeg(self):
         """Test converting to JPEG format."""
@@ -42,6 +63,7 @@ class TestImageConverter(unittest.TestCase):
         
         with Image.open(jpeg_path) as img:
             self.assertEqual(img.format, 'JPEG')
+            self.assertEqual(img.mode, 'RGB')  # JPEG should be RGB
     
     def test_convert_to_jpg(self):
         """Test converting to JPG format."""
@@ -55,6 +77,7 @@ class TestImageConverter(unittest.TestCase):
         
         with Image.open(jpg_path) as img:
             self.assertEqual(img.format, 'JPEG')
+            self.assertEqual(img.mode, 'RGB')  # JPG should be RGB
     
     def test_convert_to_png(self):
         """Test converting to PNG format."""
@@ -94,6 +117,7 @@ class TestImageConverter(unittest.TestCase):
         
         with Image.open(bmp_path) as img:
             self.assertEqual(img.format, 'BMP')
+            self.assertEqual(img.mode, 'RGB')  # BMP should be RGB
     
     def test_convert_to_tiff(self):
         """Test converting to TIFF format."""
@@ -133,6 +157,7 @@ class TestImageConverter(unittest.TestCase):
         
         with Image.open(ico_path) as img:
             self.assertEqual(img.format, 'ICO')
+            self.assertEqual(img.mode, 'RGBA')  # ICO should be RGBA
     
     def test_convert_to_tga(self):
         """Test converting to TGA format."""
@@ -146,6 +171,7 @@ class TestImageConverter(unittest.TestCase):
         
         with Image.open(tga_path) as img:
             self.assertEqual(img.format, 'TGA')
+            self.assertEqual(img.mode, 'RGB')  # TGA should be RGB
     
     def test_convert_to_pcx(self):
         """Test converting to PCX format."""
@@ -159,6 +185,7 @@ class TestImageConverter(unittest.TestCase):
         
         with Image.open(pcx_path) as img:
             self.assertEqual(img.format, 'PCX')
+            self.assertEqual(img.mode, 'RGB')  # PCX should be RGB
     
     def test_convert_from_jpg_to_all_formats(self):
         """Test converting from JPG to all supported formats."""
@@ -301,8 +328,10 @@ class TestImageConverter(unittest.TestCase):
                 with Image.open(output_path) as img:
                     if format_name in ['JPEG', 'JPG']:
                         self.assertEqual(img.format, 'JPEG')
+                        self.assertEqual(img.mode, 'RGB')
                     else:
                         self.assertEqual(img.format, format_name)
+                        self.assertEqual(img.mode, 'RGB')
     
     def test_convert_with_grayscale(self):
         """Test converting grayscale images to all formats."""
@@ -433,6 +462,129 @@ class TestImageConverter(unittest.TestCase):
         self.assertTrue(os.path.exists(png_path))
         
         with Image.open(png_path) as img:
+            self.assertEqual(img.format, 'PNG')
+    
+    def test_convert_with_different_colors(self):
+        """Test converting images with different colors to all formats."""
+        colors = [(255, 0, 0), (0, 255, 0), (0, 0, 255), (255, 255, 255), (0, 0, 0)]
+        formats = ['JPEG', 'JPG', 'PNG', 'GIF', 'BMP', 'TIFF', 'WEBP', 'ICO', 'TGA', 'PCX']
+        
+        for color in colors:
+            for format_name in formats:
+                with self.subTest(color=color, format=format_name):
+                    jpg_path = self.create_test_image('jpg', color=color)
+                    output_path = os.path.join(self.test_dir, f"output_{color[0]}_{color[1]}_{color[2]}.{format_name.lower()}")
+                    
+                    result = convert_image(jpg_path, output_path, format_name)
+                    
+                    self.assertTrue(result)
+                    self.assertTrue(os.path.exists(output_path))
+                    
+                    with Image.open(output_path) as img:
+                        if format_name in ['JPEG', 'JPG']:
+                            self.assertEqual(img.format, 'JPEG')
+                        else:
+                            self.assertEqual(img.format, format_name)
+    
+    def test_convert_with_alpha_channel(self):
+        """Test converting images with alpha channel to different formats."""
+        # Create an image with alpha channel
+        img = Image.new('RGBA', (100, 100), (255, 0, 0, 128))
+        rgba_input = os.path.join(self.test_dir, "rgba.png")
+        img.save(rgba_input, 'PNG')
+        
+        formats = ['PNG', 'WEBP', 'ICO', 'TIFF', 'JPEG', 'JPG', 'BMP', 'TGA', 'PCX']
+        
+        for format_name in formats:
+            with self.subTest(format=format_name):
+                output_path = os.path.join(self.test_dir, f"output.{format_name.lower()}")
+                result = convert_image(rgba_input, output_path, format_name)
+                
+                self.assertTrue(result)
+                self.assertTrue(os.path.exists(output_path))
+                
+                with Image.open(output_path) as img:
+                    if format_name in ['JPEG', 'JPG']:
+                        self.assertEqual(img.format, 'JPEG')
+                        self.assertEqual(img.mode, 'RGB')  # Should convert to RGB
+                    elif format_name in ['ICO']:
+                        self.assertEqual(img.format, format_name)
+                        self.assertEqual(img.mode, 'RGBA')  # Should preserve RGBA
+                    else:
+                        self.assertEqual(img.format, format_name)
+    
+    def test_convert_with_large_images(self):
+        """Test converting large images to ensure performance."""
+        large_sizes = [(1920, 1080), (2560, 1440), (3840, 2160)]
+        formats = ['JPEG', 'PNG', 'WEBP']  # Test with most common formats
+        
+        for width, height in large_sizes:
+            for format_name in formats:
+                with self.subTest(size=(width, height), format=format_name):
+                    jpg_path = self.create_test_image('jpg', size=(width, height))
+                    output_path = os.path.join(self.test_dir, f"large_{width}x{height}.{format_name.lower()}")
+                    
+                    result = convert_image(jpg_path, output_path, format_name)
+                    
+                    self.assertTrue(result)
+                    self.assertTrue(os.path.exists(output_path))
+                    
+                    with Image.open(output_path) as img:
+                        self.assertEqual(img.size, (width, height))
+                        if format_name in ['JPEG', 'JPG']:
+                            self.assertEqual(img.format, 'JPEG')
+                        else:
+                            self.assertEqual(img.format, format_name)
+    
+    def test_convert_with_small_images(self):
+        """Test converting very small images."""
+        small_sizes = [(1, 1), (10, 10), (16, 16), (32, 32)]
+        formats = ['JPEG', 'PNG', 'GIF', 'ICO', 'BMP']
+        
+        for width, height in small_sizes:
+            for format_name in formats:
+                with self.subTest(size=(width, height), format=format_name):
+                    # Skip ICO for sizes smaller than 16x16
+                    if format_name == 'ICO' and (width < 16 or height < 16):
+                        self.skipTest('ICO format does not support images smaller than 16x16')
+                    jpg_path = self.create_test_image('jpg', size=(width, height))
+                    output_path = os.path.join(self.test_dir, f"small_{width}x{height}.{format_name.lower()}")
+                    
+                    result = convert_image(jpg_path, output_path, format_name)
+                    
+                    self.assertTrue(result)
+                    self.assertTrue(os.path.exists(output_path))
+                    
+                    with Image.open(output_path) as img:
+                        if format_name != 'ICO':  # ICO has size restrictions
+                            self.assertEqual(img.size, (width, height))
+                        if format_name in ['JPEG', 'JPG']:
+                            self.assertEqual(img.format, 'JPEG')
+                        else:
+                            self.assertEqual(img.format, format_name)
+    
+    def test_convert_with_edge_cases(self):
+        """Test converting with edge case formats and scenarios."""
+        # Test with empty format string
+        jpg_path = self.create_test_image('jpg')
+        output_path = os.path.join(self.test_dir, "output.png")
+        
+        result = convert_image(jpg_path, output_path, '')
+        
+        self.assertTrue(result)
+        self.assertTrue(os.path.exists(output_path))
+        
+        with Image.open(output_path) as img:
+            self.assertEqual(img.format, 'PNG')
+        
+        # Test with None format (should use default PNG)
+        output_path2 = os.path.join(self.test_dir, "output2.png")
+        result2 = convert_image(jpg_path, output_path2, None)
+        
+        self.assertTrue(result2)
+        self.assertTrue(os.path.exists(output_path2))
+        
+        with Image.open(output_path2) as img:
             self.assertEqual(img.format, 'PNG')
 
 

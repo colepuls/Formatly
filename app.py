@@ -61,29 +61,28 @@ def upload_file():
         file.save(input_path)
         
         # Convert to selected format
-        success = convert_image(input_path, output_path, output_format)
+        success, actual_format, actual_filename = convert_image(input_path, output_path, output_format)
         
         if success:
             # Clean up input file
             os.remove(input_path)
             
             # Check if the output file was actually created
-            if os.path.exists(output_path):
+            if actual_filename and os.path.exists(actual_filename):
+                forced_png = (actual_format == 'PNG' and output_format != 'PNG')
                 return jsonify({
                     'success': True,
-                    'filename': output_filename,
+                    'filename': os.path.basename(actual_filename),
                     'original_name': file.filename,
-                    'output_format': output_format
+                    'output_format': actual_format,
+                    'forced_png': forced_png,
+                    'forced_message': 'The requested format is not supported. Your file was converted to PNG instead.' if forced_png else None
                 })
             else:
-                # If output file doesn't exist, the conversion might have failed silently
                 return jsonify({'error': 'Conversion completed but output file not found'}), 500
         else:
-            # Clean up on failure
             if os.path.exists(input_path):
                 os.remove(input_path)
-            
-            # Check if ImageMagick is needed for this format
             from image_converter import pillow_can_write
             if not pillow_can_write(output_format):
                 imagemagick_available = check_imagemagick() is not None
@@ -95,7 +94,7 @@ def upload_file():
                     return jsonify({'error': f'Conversion to {output_format} failed. The format might not be supported or the input file might be corrupted.'}), 500
             else:
                 return jsonify({'error': 'Conversion failed. The input file might be corrupted or unsupported.'}), 500
-            
+        
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
