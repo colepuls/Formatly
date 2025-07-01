@@ -195,4 +195,4 @@ If you encounter any issues:
 
 ---
 
-**Made with ❤️ for easy image conversion**
+**Made by Cole Puls**
