@@ -2,9 +2,19 @@
 
 A sleek, modern web application for converting images between various formats with a beautiful dark-themed UI and smooth animations.
 
+## 🎨 Interface Preview
+
+<div align="center">
+
 ![Formatly Interface](assets/formatly-screenshot.png)
 
 *Beautiful dark-themed interface with animated file format carousel*
+
+![Formatly in Action](assets/formatly-screenshot2.png)
+
+*Sleek conversion interface with drag & drop functionality*
+
+</div>
 
 ## Features
 
