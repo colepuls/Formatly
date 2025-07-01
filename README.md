@@ -2,6 +2,10 @@
 
 A sleek, modern web application for converting images between various formats with a beautiful dark-themed UI and smooth animations.
 
+![Formatly Interface](assets/formatly-screenshot.png)
+
+*Beautiful dark-themed interface with animated file format carousel*
+
 ## Features
 
 - 🎨 **Modern Dark UI** - Clean, professional interface with smooth animations
@@ -119,6 +123,7 @@ Formatly/
 ├── image_converter.py  # Image conversion logic
 ├── wsgi.py            # WSGI configuration
 ├── requirements.txt   # Python dependencies
+├── assets/            # Images and assets for README
 ├── templates/
 │   └── index.html     # Web interface
 ├── uploads/           # Temporary upload storage
