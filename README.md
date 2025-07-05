@@ -60,11 +60,6 @@ Open http://localhost:5001
 brew install imagemagick
 ```
 
-**Ubuntu/Debian:**
-```bash
-sudo apt-get install imagemagick
-```
-
 **Windows:**
 Download from [ImageMagick Downloads](https://imagemagick.org/script/download.php#windows)
 
