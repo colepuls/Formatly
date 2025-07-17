@@ -18,7 +18,7 @@ A web application for converting images between different formats.
 
 **Backend:** Python, Flask, Pillow (PIL), Gunicorn  
 **Frontend:** HTML5, CSS3, Vanilla JavaScript  
-**Image Processing:** Pillow + ImageMagick (optional)  
+**Image Processing:** Pillow + ImageMagick 
 
 </div>
 
