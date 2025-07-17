@@ -26,9 +26,9 @@ A web application for converting images between different formats.
 
 <div align="center">
 
-![Formatly Interface](assets/Screenshot%202025-07-17%20at%205.52.47%20PM.png)
+![Formatly Interface](assets/screenshot1.png)
 
-![Formatly in Action](assets/Screenshot%202025-07-17%20at%205.53.24%20PM.png)
+![Formatly in Action](assets/screenshot2.png)
 
 </div>
 
