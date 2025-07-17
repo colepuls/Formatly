@@ -2,6 +2,24 @@
 
 A web application for converting images between different formats.
 
+## Why I Built Formatly
+
+I created Formatly out of personal frustration with existing image conversion tools. Many of them are cluttered with ads, require unnecessary clicks, or hide key features behind paywalls. I wanted a clean, fast, ad-free tool that I could trust and use regularly without hassle.
+
+As someone who often needs to convert images for website submissions, projects, and platform compatibility, I realized a lot of people likely face the same issue. Formatly is built to be simple and functional, no distractions, just quick file conversions.
+
+## Scalability
+
+Formatly is designed with scalability in mind:
+
+- **Modular Backend**: The image conversion logic is separated into its own module, making it easy to extend support for additional formats or processing features.
+- **Flask API-Ready**: The app can easily be adapted into a RESTful API for integration with other applications or services.
+- **Authentication & Storage (Future Scope)**: With minor additions, Formatly could support user accounts, saved conversion history, cloud storage, and usage analytics.
+- **UI Enhancements**: The current frontend is built with vanilla JS, but could be migrated to React or another framework for a more dynamic experience.
+- **Performance Optimization**: The current architecture supports easy integration of caching, CDN, and load balancing for high-traffic scenarios.
+
+Whether used as a personal tool or expanded into a public service, Formatly is built to grow.
+
 ## Live Demo
 
 **Try it online:** [https://web-production-1acc.up.railway.app/](https://web-production-1acc.up.railway.app/)
