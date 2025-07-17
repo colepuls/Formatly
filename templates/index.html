@@ -15,9 +15,9 @@
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 50%, #0f1419 100%);
-            color: #f3f3f3;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #1a1f2e 0%, #0f1419 100%);
+            color: #e0e0e0;
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -25,6 +25,93 @@
             padding: 0;
             margin: 0;
             position: relative;
+        }
+        
+        /* File Type Animation Banner */
+        .file-types-banner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            background: rgba(24, 26, 27, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(79, 140, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            z-index: 1000;
+            animation: bannerFadeIn 0.3s ease-out;
+        }
+        
+        @keyframes bannerFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .file-types-scroll {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            animation: scrollFileTypes 60s linear infinite;
+            white-space: nowrap;
+            will-change: transform;
+            transform: translateX(0);
+        }
+        
+        .file-type-tag {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(79, 140, 255, 0.1);
+            border: 1px solid rgba(79, 140, 255, 0.3);
+            border-radius: 20px;
+            color: #4f8cff;
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            opacity: 0.7;
+            will-change: transform, opacity;
+            backface-visibility: hidden;
+            transform: translateZ(0);
+        }
+        
+        .file-type-tag:hover {
+            opacity: 1;
+            background: rgba(79, 140, 255, 0.2);
+            border-color: #4f8cff;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(79, 140, 255, 0.3);
+        }
+        
+        .file-type-icon {
+            width: 16px;
+            height: 16px;
+            color: #4f8cff;
+            opacity: 0.8;
+        }
+        
+        @keyframes scrollFileTypes {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+        
+        /* Adjust main container to account for banner */
+        .container {
+            margin-top: 80px;
         }
         
         body::before {
@@ -47,9 +134,7 @@
             backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 20px;
-            box-shadow: 
-                0 20px 40px rgba(0, 0, 0, 0.3),
-                0 0 0 1px rgba(255, 255, 255, 0.05);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
             padding: 40px 32px 32px 32px;
             max-width: 600px;
             width: 100%;
@@ -73,10 +158,10 @@
         
         @keyframes logoGlow {
             from {
-                filter: drop-shadow(0 0 10px rgba(79, 140, 255, 0.3));
+                filter: drop-shadow(0 0 5px rgba(79, 140, 255, 0.2));
             }
             to {
-                filter: drop-shadow(0 0 20px rgba(79, 140, 255, 0.6));
+                filter: drop-shadow(0 0 10px rgba(79, 140, 255, 0.4));
             }
         }
         
@@ -101,47 +186,12 @@
         }
         
         .file-types-carousel {
-            position: absolute;
-            top: -50px;
-            left: -50px;
-            right: -50px;
-            bottom: -50px;
-            border-radius: 25px;
-            overflow: visible;
-            pointer-events: none;
-            z-index: -1;
+            /* Removed the file type animation bubbles */
         }
         
         .file-type-item {
-            position: absolute;
-            top: 50%;
-            left: 46%;
-            transform-origin: -268px 0;
-            background: linear-gradient(135deg, rgba(79, 140, 255, 0.1), rgba(124, 58, 237, 0.1));
-            border: 1px solid rgba(79, 140, 255, 0.2);
-            border-radius: 12px;
-            padding: 6px 12px;
-            font-size: 0.7rem;
-            font-weight: 500;
-            color: #4f8cff;
-            backdrop-filter: blur(10px);
-            animation: rotateAround 20s linear infinite;
-            opacity: 0.6;
-            transition: all 0.3s ease;
+            /* Removed the file type animation bubbles */
         }
-        
-        .file-type-item:nth-child(1) { animation-delay: 0s; }
-        .file-type-item:nth-child(2) { animation-delay: -1.67s; }
-        .file-type-item:nth-child(3) { animation-delay: -3.33s; }
-        .file-type-item:nth-child(4) { animation-delay: -5s; }
-        .file-type-item:nth-child(5) { animation-delay: -6.67s; }
-        .file-type-item:nth-child(6) { animation-delay: -8.33s; }
-        .file-type-item:nth-child(7) { animation-delay: -10s; }
-        .file-type-item:nth-child(8) { animation-delay: -11.67s; }
-        .file-type-item:nth-child(9) { animation-delay: -13.33s; }
-        .file-type-item:nth-child(10) { animation-delay: -15s; }
-        .file-type-item:nth-child(11) { animation-delay: -16.67s; }
-        .file-type-item:nth-child(12) { animation-delay: -18.33s; }
         
         @keyframes rotateAround {
             0% {
@@ -173,6 +223,7 @@
             justify-content: center;
             gap: 12px;
             animation: formatSelectFadeIn 0.8s ease-out 0.7s both;
+            position: relative;
         }
         
         @keyframes formatSelectFadeIn {
@@ -192,9 +243,105 @@
             font-weight: 500;
         }
         
+        /* Dropdown options pop out to the right of the main container */
+        .custom-dropdown {
+            position: relative;
+            display: inline-block;
+            min-width: 120px;
+        }
+
+        .dropdown-options {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            margin-top: 8px;
+            min-width: 140px;
+            background: rgba(24, 26, 27, 0.95);
+            border: 1px solid rgba(79, 140, 255, 0.3);
+            border-radius: 10px;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .dropdown-options.open {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        @media (max-width: 767px) {
+            .dropdown-options {
+                left: 0;
+                right: 0;
+                margin-left: 0;
+                min-width: 120px;
+                top: 100%;
+            }
+        }
+        
+        .dropdown-option {
+            padding: 10px 16px;
+            color: #e0e0e0;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.95rem;
+        }
+        
+        .dropdown-option:last-child {
+            border-bottom: none;
+        }
+        
+        .dropdown-option:hover {
+            background: rgba(79, 140, 255, 0.1);
+            color: #4f8cff;
+        }
+        
+        .dropdown-option.selected {
+            background: rgba(79, 140, 255, 0.15);
+            color: #4f8cff;
+            font-weight: 500;
+        }
+        
+        /* Custom scrollbar for dropdown */
+        .dropdown-options::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .dropdown-options::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 3px;
+        }
+        
+        .dropdown-options::-webkit-scrollbar-thumb {
+            background: rgba(79, 140, 255, 0.3);
+            border-radius: 3px;
+        }
+        
+        .dropdown-options::-webkit-scrollbar-thumb:hover {
+            background: rgba(79, 140, 255, 0.5);
+        }
+        
+        /* Position dropdown to the right on larger screens */
+        @media (min-width: 768px) {
+            .dropdown-options {
+                left: auto;
+                right: 0;
+                min-width: 140px;
+            }
+        }
+        
+        /* Remove custom dropdown CSS and restore original #formatSelect styles */
         #formatSelect {
             background: rgba(24, 26, 27, 0.8);
-            color: #f3f3f3;
+            color: #e0e0e0;
             border: 1px solid rgba(79, 140, 255, 0.3);
             border-radius: 10px;
             padding: 8px 16px;
@@ -203,13 +350,11 @@
             transition: all 0.3s ease;
             backdrop-filter: blur(10px);
         }
-        
         #formatSelect:hover {
             border-color: #4f8cff;
             background: rgba(24, 26, 27, 0.9);
             transform: translateY(-1px);
         }
-        
         #formatSelect:focus {
             outline: none;
             border-color: #4f8cff;
@@ -282,6 +427,20 @@
             animation: iconFloat 3s ease-in-out infinite;
         }
         
+        .upload-icon svg {
+            width: 48px;
+            height: 48px;
+            color: #4f8cff;
+            opacity: 0.8;
+            transition: all 0.3s ease;
+        }
+        
+        .upload-area:hover .upload-icon svg {
+            color: #4f8cff;
+            opacity: 1;
+            transform: scale(1.1);
+        }
+        
         @keyframes iconFloat {
             0%, 100% { transform: translateY(0px); }
             50% { transform: translateY(-5px); }
@@ -294,7 +453,7 @@
         
         .upload-text {
             font-size: 1.1rem;
-            color: #f3f3f3;
+            color: #e0e0e0;
             margin-bottom: 6px;
             font-weight: 500;
         }
@@ -308,6 +467,109 @@
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer;
             z-index: 10;
+        }
+        
+        /* Selected file display bubble */
+        .selected-file-container {
+            display: none;
+            margin: 20px 0;
+            animation: selectedFileFadeIn 0.4s ease-out;
+        }
+        
+        @keyframes selectedFileFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        .selected-file-bubble {
+            background: rgba(79, 140, 255, 0.1);
+            border: 1px solid rgba(79, 140, 255, 0.3);
+            border-radius: 12px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .selected-file-bubble::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(79, 140, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .selected-file-bubble:hover::before {
+            left: 100%;
+        }
+        
+        .selected-file-bubble:hover {
+            border-color: #4f8cff;
+            background: rgba(79, 140, 255, 0.15);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(79, 140, 255, 0.2);
+        }
+        
+        .selected-file-icon {
+            color: #4f8cff;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        
+        .selected-file-icon svg {
+            width: 20px;
+            height: 20px;
+            color: #4f8cff;
+        }
+        
+        .selected-file-name {
+            color: #e0e0e0;
+            font-size: 1rem;
+            font-weight: 500;
+            text-align: center;
+            word-break: break-word;
+            max-width: 100%;
+            line-height: 1.4;
+        }
+        
+        .remove-file-btn {
+            background: none;
+            border: none;
+            color: #888;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .remove-file-btn:hover {
+            color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.1);
+            transform: scale(1.1);
+        }
+        
+        .remove-file-btn svg {
+            width: 16px;
+            height: 16px;
+            color: inherit;
         }
         
         .progress-container {
@@ -433,7 +695,7 @@
         .result-title {
             font-size: 1.3rem;
             font-weight: 600;
-            color: #f3f3f3;
+            color: #e0e0e0;
             margin-bottom: 4px;
         }
         
@@ -448,7 +710,7 @@
         
         .file-name {
             font-size: 1.1rem;
-            color: #f3f3f3;
+            color: #e0e0e0;
             font-weight: 500;
             margin-bottom: 4px;
         }
@@ -499,6 +761,16 @@
         
         .btn-icon {
             font-size: 1rem;
+            width: 18px;
+            height: 18px;
+            margin-right: 8px;
+            color: inherit;
+        }
+        
+        .btn-icon svg {
+            width: 18px;
+            height: 18px;
+            color: inherit;
         }
         
         .download-btn::before {
@@ -560,10 +832,66 @@
             50% { opacity: 0.8; }
         }
         
+        /* Revert custom button styles */
+        .custom-file-upload {
+            display: none;
+        }
+
+        .file-name {
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            .file-types-banner {
+                height: 55px;
+            }
+            
+            .file-type-tag {
+                padding: 7px 14px;
+                font-size: 0.85rem;
+                gap: 7px;
+            }
+            
+            .file-type-icon {
+                width: 15px;
+                height: 15px;
+            }
+            
+            .file-types-scroll {
+                gap: 30px;
+                animation-duration: 50s;
+            }
+            
+            .container {
+                margin-top: 75px;
+            }
+        }
+        
         @media (max-width: 500px) {
+            .file-types-banner {
+                height: 50px;
+            }
+            
+            .file-type-tag {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+                gap: 6px;
+            }
+            
+            .file-type-icon {
+                width: 14px;
+                height: 14px;
+            }
+            
+            .file-types-scroll {
+                gap: 25px;
+                animation-duration: 45s;
+            }
+            
             .container { 
                 padding: 24px 16px; 
                 margin: 16px;
+                margin-top: 70px;
             }
             
             .file-types-carousel {
@@ -618,28 +946,357 @@
                 padding: 30px 16px;
             }
             
+            .selected-file-bubble {
+                padding: 12px 16px;
+                gap: 8px;
+            }
+            
+            .selected-file-name {
+                font-size: 0.9rem;
+            }
+            
             .logo {
                 font-size: 2rem;
             }
         }
     </style>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script>
+        // Ensure Lucide is loaded and icons are created
+        function initializeIcons() {
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+                console.log('Lucide icons initialized successfully');
+            } else {
+                console.log('Lucide not loaded yet, retrying...');
+                setTimeout(initializeIcons, 100);
+            }
+        }
+        
+        // Initialize icons when script loads
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializeIcons);
+        } else {
+            initializeIcons();
+        }
+    </script>
 </head>
 <body>
-    <div class="container">
-        <div class="file-types-carousel">
-            <div class="file-type-item">PNG</div>
-            <div class="file-type-item">JPEG</div>
-            <div class="file-type-item">GIF</div>
-            <div class="file-type-item">WEBP</div>
-            <div class="file-type-item">TIFF</div>
-            <div class="file-type-item">BMP</div>
-            <div class="file-type-item">ICO</div>
-            <div class="file-type-item">PDF</div>
-            <div class="file-type-item">SVG</div>
-            <div class="file-type-item">HEIC</div>
-            <div class="file-type-item">RAW</div>
-            <div class="file-type-item">PSD</div>
+    <!-- File Types Animation Banner -->
+    <div class="file-types-banner">
+        <div class="file-types-scroll">
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                JPEG
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                PNG
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                GIF
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                WEBP
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                TIFF
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                BMP
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                HEIC
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                RAW
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                PSD
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                EXR
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                ICO
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                SVG
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                EPS
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                PDF
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                AI
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                CDR
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                APNG
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                SVGZ
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                DDS
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                TGA
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                JFIF
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                AVIF
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                PIC
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                XCF
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                DNG
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                PCX
+            </div>
+            <!-- Additional duplicates for seamless loop -->
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                JPEG
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                PNG
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                GIF
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                WEBP
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                TIFF
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                BMP
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                HEIC
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                RAW
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                PSD
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                EXR
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                ICO
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                SVG
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                EPS
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                PDF
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                AI
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                CDR
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                APNG
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                SVGZ
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                DDS
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                TGA
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                JFIF
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                AVIF
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                PIC
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                XCF
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                DNG
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                PCX
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                PNG
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                GIF
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                WEBP
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                TIFF
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                BMP
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                HEIC
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                RAW
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                PSD
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                EXR
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                ICO
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                SVG
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                EPS
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                PDF
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                AI
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                CDR
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                APNG
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                SVGZ
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                DDS
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                TGA
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                JFIF
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                AVIF
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                PIC
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                XCF
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                DNG
+            </div>
+            <div class="file-type-tag">
+                <i data-lucide="file-image" class="file-type-icon"></i>
+                PCX
+            </div>
         </div>
+    </div>
+    <div class="container">
         <div class="logo">Formatly</div>
         <div class="subtitle">Convert any image to any format</div>
         {% if not imagemagick_available %}
@@ -655,11 +1312,23 @@
                 {% endfor %}
             </select>
         </div>
+        <!-- Revert to default file input -->
         <div class="upload-area" id="uploadArea">
-            <div class="upload-icon">📁</div>
+            <div class="upload-icon">
+                <i data-lucide="file-image"></i>
+            </div>
             <div class="upload-text">Drop your image or click to browse</div>
             <div class="upload-hint">Supports JPG, PNG, GIF, WebP, and more</div>
             <input type="file" class="file-input" id="fileInput" accept=".jpg,.jpeg,.gif,.bmp,.tiff,.webp,.heic,.raw,.psd,.exr,.ico,.svg,.eps,.pdf,.ai,.cdr,.apng,.svgz,.dds,.tga,.jfif,.avif,.pic,.xcf,.dng,.pcx,.png">
+        </div>
+        <div class="selected-file-container" id="selectedFileContainer">
+            <div class="selected-file-bubble">
+                <i data-lucide="file-text" class="selected-file-icon"></i>
+                <span class="selected-file-name" id="selectedFileName"></span>
+                <button class="remove-file-btn" id="removeFileBtn">
+                    <i data-lucide="x" class="btn-icon"></i>
+                </button>
+            </div>
         </div>
         <div class="progress-container" id="progressContainer">
             <div class="progress-bar">
@@ -682,11 +1351,11 @@
                 </div>
                 <div class="action-buttons">
                     <a href="#" class="download-btn primary" id="downloadBtn">
-                        <span class="btn-icon">⬇️</span>
+                        <i data-lucide="download" class="btn-icon"></i>
                         Download
                     </a>
                     <button class="download-btn secondary" onclick="resetForm()">
-                        <span class="btn-icon">🔄</span>
+                        <i data-lucide="iteration-cw" class="btn-icon"></i>
                         Convert Another
                     </button>
                 </div>
@@ -697,6 +1366,15 @@
         </div>
     </div>
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const formatSelect = document.getElementById('formatSelect');
+            formatSelect.addEventListener('change', () => {
+                formatSelect.style.transform = 'scale(1.05)';
+                setTimeout(() => {
+                    formatSelect.style.transform = 'scale(1)';
+                }, 150);
+            });
+        });
         const uploadArea = document.getElementById('uploadArea');
         const fileInput = document.getElementById('fileInput');
         const progressContainer = document.getElementById('progressContainer');
@@ -707,7 +1385,10 @@
         const downloadBtn = document.getElementById('downloadBtn');
         const resultText = document.getElementById('resultText');
         const errorText = document.getElementById('errorText');
-        const formatSelect = document.getElementById('formatSelect');
+        const hiddenFormatInput = document.getElementById('formatSelect');
+        const selectedFileContainer = document.getElementById('selectedFileContainer');
+        const selectedFileName = document.getElementById('selectedFileName');
+        const removeFileBtn = document.getElementById('removeFileBtn');
 
         // Add smooth scroll behavior
         document.documentElement.style.scrollBehavior = 'smooth';
@@ -731,10 +1412,17 @@
             }
         });
         
+        // Update file name display when a file is selected
         fileInput.addEventListener('change', (e) => {
             if (e.target.files.length > 0) {
                 handleFile(e.target.files[0]);
             }
+        });
+        
+        // Remove file button functionality
+        removeFileBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            resetForm();
         });
 
         function handleFile(file) {
@@ -745,7 +1433,7 @@
             
             const fileName = file.name.toLowerCase();
             const fileExtension = fileName.split('.').pop();
-            const isImageByExtension = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff', 'webp', 'heic', 'raw', 'psd', 'exr', 'ico', 'svg', 'eps', 'pdf', 'ai', 'cdr', 'apng', 'svgz', 'dds', 'tga', 'jfif', 'avif', 'pic', 'xcf', 'dng', 'pcx'].includes(fileExtension);
+            const isImageByExtension = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff', 'webp', 'heic', 'raw', 'psd', 'exr', 'ico', 'svg', 'eps', 'pdf', 'ai', 'cdr', 'apng', 'svgz', 'dds', 'tga', 'jfif', 'avif', 'pic', 'xcf', 'dng', 'pcx', 'png'].includes(fileExtension);
             const isImageByMime = file.type.startsWith('image/') || file.type === 'application/pdf' || file.type === 'image/svg+xml';
             
             if (!isImageByExtension && !isImageByMime) {
@@ -753,13 +1441,19 @@
                 return;
             }
             
+            // Show selected file in bubble
+            selectedFileName.textContent = file.name;
+            selectedFileContainer.style.display = 'block';
+            uploadArea.style.display = 'none'; // Hide upload area when file is selected
+            hideError();
+            
             uploadFile(file);
         }
 
         function uploadFile(file) {
             const formData = new FormData();
             formData.append('file', file);
-            formData.append('output_format', formatSelect.value);
+            formData.append('output_format', hiddenFormatInput.value);
             
             showProgress();
             hideError();
@@ -856,21 +1550,18 @@
             hideResult();
             hideError();
             fileInput.value = '';
+            selectedFileName.textContent = ''; // Clear file name display
+            selectedFileContainer.style.display = 'none'; // Hide selected file bubble
             document.getElementById('forcedWarning').style.display = 'none';
+            
+            // Show upload area again
+            uploadArea.style.display = 'block';
             
             // Add reset animation
             uploadArea.style.animation = 'none';
             uploadArea.offsetHeight;
             uploadArea.style.animation = 'uploadAreaFadeIn 0.8s ease-out';
         }
-
-        // Add some interactive micro-animations
-        formatSelect.addEventListener('change', () => {
-            formatSelect.style.transform = 'scale(1.05)';
-            setTimeout(() => {
-                formatSelect.style.transform = 'scale(1)';
-            }, 150);
-        });
 
         // Add parallax effect to background elements
         document.addEventListener('mousemove', (e) => {
@@ -880,6 +1571,39 @@
             document.body.style.setProperty('--mouse-x', moveX + 'px');
             document.body.style.setProperty('--mouse-y', moveY + 'px');
         });
+
+        // Icons are initialized by the dedicated script in the head
+        
+        // Ensure file type banner icons are initialized
+        function initializeFileTypeIcons() {
+            if (typeof lucide !== 'undefined') {
+                // Re-initialize icons to ensure file type banner icons are created
+                lucide.createIcons();
+            }
+        }
+        
+        // Force animation to start immediately
+        function startFileTypeAnimation() {
+            const scrollElement = document.querySelector('.file-types-scroll');
+            if (scrollElement) {
+                // Force a reflow to ensure animation starts immediately
+                scrollElement.style.animation = 'none';
+                scrollElement.offsetHeight; // Trigger reflow
+                scrollElement.style.animation = null;
+            }
+        }
+        
+        // Initialize file type icons and start animation when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeFileTypeIcons();
+            startFileTypeAnimation();
+        });
+        
+        // Also start animation immediately if DOM is already loaded
+        if (document.readyState === 'complete' || document.readyState === 'interactive') {
+            initializeFileTypeIcons();
+            startFileTypeAnimation();
+        }
     </script>
 </body>
 </html> 
