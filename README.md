@@ -36,13 +36,37 @@ A web application for converting images between different formats.
 
 *Advanced formats require ImageMagick*
 
-## Installation
+## Deployment
 
-### Prerequisites
+### Railway (Recommended)
+
+Railway is the recommended hosting platform for Formatly as it supports system dependencies like ImageMagick.
+
+1. **Fork or clone this repository**
+2. **Connect to Railway:**
+   - Go to [Railway.app](https://railway.app)
+   - Sign up/Login with GitHub
+   - Click "New Project" → "Deploy from GitHub repo"
+   - Select your Formatly repository
+3. **Deploy:**
+   - Railway will automatically detect the Python app
+   - It will install ImageMagick and Python dependencies
+   - Your app will be deployed with full functionality
+
+**Railway automatically handles:**
+- ImageMagick installation
+- Python dependency management
+- SSL certificates
+- Custom domains
+- Auto-deployment from GitHub
+
+### Local Development
+
+#### Prerequisites
 - Python 3.8+
 - ImageMagick (optional, for advanced formats)
 
-### Setup
+#### Setup
 
 ```bash
 git clone https://github.com/colepuls/Formatly.git
@@ -53,7 +77,7 @@ python3 app.py
 
 Open http://localhost:5001
 
-### ImageMagick Installation
+#### ImageMagick Installation
 
 **macOS:**
 ```bash
@@ -62,6 +86,12 @@ brew install imagemagick
 
 **Windows:**
 Download from [ImageMagick Downloads](https://imagemagick.org/script/download.php#windows)
+
+**Linux (Ubuntu/Debian):**
+```bash
+sudo apt-get update
+sudo apt-get install imagemagick
+```
 
 ## Usage
 
@@ -78,8 +108,19 @@ Formatly/
 ├── image_converter.py  # Conversion logic
 ├── templates/
 │   └── index.html     # Web interface
-└── requirements.txt   # Dependencies
+├── requirements.txt   # Dependencies
+├── railway.json       # Railway configuration
+├── nixpacks.toml      # Build configuration
+├── Dockerfile         # Docker configuration
+└── wsgi.py           # WSGI entry point
 ```
+
+## Configuration Files
+
+- **`railway.json`**: Railway deployment settings
+- **`nixpacks.toml`**: Build configuration with ImageMagick
+- **`Dockerfile`**: Alternative Docker deployment
+- **`Procfile`**: Process management for gunicorn
 
 ---
 
