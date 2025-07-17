@@ -4,7 +4,7 @@ A web application for converting images between different formats.
 
 ## Live Demo
 
-**🌐 Try it online:** [https://web-production-1acc.up.railway.app/](https://web-production-1acc.up.railway.app/)
+**Try it online:** [https://web-production-1acc.up.railway.app/](https://web-production-1acc.up.railway.app/)
 
 ## Technology Stack
 

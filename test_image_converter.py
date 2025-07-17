@@ -9,16 +9,15 @@ import shutil
 
 class TestImageConverter(unittest.TestCase):
     def setUp(self):
-        """Set up test fixtures before each test method."""
+        """Set up test fixtures."""
         self.test_dir = tempfile.mkdtemp()
         
     def tearDown(self):
-        """Clean up after each test method."""
-        # Recursively remove the test directory and all its contents
+        """Clean up test directory."""
         shutil.rmtree(self.test_dir)
     
     def create_test_image(self, format_name, size=(100, 100), color=(255, 0, 0), mode='RGB'):
-        """Helper method to create test images in different formats."""
+        """Create test images in different formats."""
         img = Image.new(mode, size, color)
         filename = f"test_image.{format_name.lower()}"
         filepath = os.path.join(self.test_dir, filename)
@@ -31,24 +30,21 @@ class TestImageConverter(unittest.TestCase):
         return filepath
     
     def test_pillow_can_write_function(self):
-        """Test the pillow_can_write helper function."""
-        # Test supported formats
+        """Test pillow_can_write function."""
         supported_formats = ['JPEG', 'JPG', 'PNG', 'GIF', 'BMP', 'TIFF', 'WEBP', 'ICO', 'TGA', 'PCX']
         for fmt in supported_formats:
             with self.subTest(format=fmt):
                 self.assertTrue(pillow_can_write(fmt))
                 self.assertTrue(pillow_can_write(fmt.lower()))
         
-        # Test unsupported formats
         unsupported_formats = ['SVG', 'PDF', 'AVIF', 'HEIC', 'UNSUPPORTED_FORMAT']
         for fmt in unsupported_formats:
             with self.subTest(format=fmt):
                 self.assertFalse(pillow_can_write(fmt))
     
     def test_check_imagemagick_function(self):
-        """Test the check_imagemagick helper function."""
+        """Test check_imagemagick function."""
         result = check_imagemagick()
-        # This should return either 'magick', 'convert', or None
         self.assertIn(result, ['magick', 'convert', None])
     
     def test_convert_to_jpeg(self):

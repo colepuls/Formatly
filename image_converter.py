@@ -13,12 +13,10 @@ def pillow_can_write(fmt):
 def check_imagemagick():
     """Check if ImageMagick is available"""
     try:
-        # Try 'magick' command first (ImageMagick 7+)
         result = subprocess.run(['magick', '-version'], capture_output=True, check=True)
         return 'magick'
     except:
         try:
-            # Try 'convert' command (ImageMagick 6)
             result = subprocess.run(['convert', '-version'], capture_output=True, check=True)
             return 'convert'
         except:
@@ -26,16 +24,15 @@ def check_imagemagick():
 
 def convert_image(input_path, output_path, output_format='PNG'):
     """
-    Convert any supported image format to the specified output format.
-    Uses Pillow for common formats, falls back to ImageMagick for advanced formats.
+    Convert image to specified format using Pillow or ImageMagick.
     
     Args:
-        input_path (str): Path to the input image file
-        output_path (str): Path where the output file should be saved
-        output_format (str): Desired output format (PNG, JPEG, GIF, etc.)
+        input_path: Path to input image
+        output_path: Path for output file
+        output_format: Desired output format
     
     Returns:
-        tuple: (success: bool, actual_format: str, actual_filename: str)
+        (success, actual_format, actual_filename)
     """
     try:
         if not os.path.exists(input_path):
@@ -158,13 +155,13 @@ def convert_image(input_path, output_path, output_format='PNG'):
 
 def convert_to_png(input_path, output_path):
     """
-    Convert any supported image format to PNG (backward compatibility).
+    Convert image to PNG format (backward compatibility).
     
     Args:
-        input_path (str): Path to the input image file
-        output_path (str): Path where the PNG file should be saved
+        input_path: Path to input image
+        output_path: Path for PNG output
     
     Returns:
-        bool: True if conversion was successful, False otherwise
+        True if successful, False otherwise
     """
     return convert_image(input_path, output_path, 'PNG')
